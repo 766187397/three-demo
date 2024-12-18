@@ -9,6 +9,9 @@
       @click="handleClickByColor(item)">
       <div class="color_item_inner" :style="{ background: item }"></div>
     </div>
+    <div class="color_item">
+      <input type="color" v-model="color" />
+    </div>
   </div>
 </template>
 
@@ -17,7 +20,7 @@ import * as THREE from "three";
 // 引入gltf模型加载库GLTFLoader.js
 import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 let scene: THREE.Scene, renderer: THREE.WebGLRenderer, camera: THREE.PerspectiveCamera, controls: OrbitControls, gltfModel: GLTF;
 // 创建GLTF加载器对象
 const loader: GLTFLoader = new GLTFLoader();
@@ -76,6 +79,7 @@ let animate = function () {
 
 // 颜色
 const colorList = [
+  "rgb(69, 201, 255)",
   "rgb(216, 27, 67)",
   "rgb(142, 36, 170)",
   "rgb(81, 45, 168)",
@@ -88,7 +92,6 @@ const colorList = [
   "rgb(230, 74, 25)",
   "rgb(233, 30, 78)",
   "rgb(156, 39, 176)",
-  "rgb(0, 0, 0)",
 ]; // 车身颜色数组
 
 const handleClickByColor = (color: string) => {
@@ -103,6 +106,13 @@ const handleClickByColor = (color: string) => {
     }
   });
 };
+
+let color = ref("#000000");
+
+watch(() => color.value, (newValue) => {
+  console.log('newValue :>> ', newValue);
+  handleClickByColor(newValue)
+})
 
 onMounted(() => {
   setScene();
@@ -130,5 +140,11 @@ onMounted(() => {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+
+.color_item input {
+  width: 30px;
+  height: 30px;
+  border: none;
 }
 </style>
