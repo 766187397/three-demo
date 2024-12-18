@@ -46,7 +46,7 @@ const loaderGLTF = () => {
     renderer.render(scene, camera); // 加载后立即渲染一次
   });
 };
-// 光线
+// 环境光
 const setAmbientLight = () => {
   const light = new THREE.AmbientLight(0xffffff); // 柔和的白光
   scene.add(light);
@@ -94,8 +94,10 @@ const colorList = [
 const handleClickByColor = (color: string) => {
   const newColor = new THREE.Color(color);
   gltfModel.scene.traverse((child) => {
+    // Object_103 车身 Object_64/Object_77 车门
+    const arr = ["Object_103", "Object_64", "Object_77"];
     // 判断是网格材质，并且有颜色属性 后续还需要判断模型模块的名称
-    if (child instanceof THREE.Mesh && "color" in child.material) {
+    if (child instanceof THREE.Mesh && "color" in child.material && arr.includes(child.name)) {
       child.material.color.set(newColor);
       child.material.needsUpdate = true; // 确保材质更新
     }
